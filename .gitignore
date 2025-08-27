@@ -1,0 +1,23 @@
+# Build results
+bin/
+obj/
+
+# VS / IDE
+.vs/
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# EF Core Migrations Designer files
+backend/CardholderApi/Migrations/*.Designer.cs
+backend/CardholderApi/Migrations/*Snapshot.cs
+
+# REST
+*.http
