@@ -1,42 +1,62 @@
-﻿using CardholderApi.Entities;
+﻿using AutoMapper;
+using CardholderApi.DTOs;
+using CardholderApi.DTOs;
+using CardholderApi.Entities;
 using CardholderApi.Persistence;
 using CardholderApi.Repositories.Interfaces;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace CardholderApi.Repositories
 {
-    public class CardholderRepository : ICardholderRepository
+    public class CardholderRepository(CardholderDbContext context, IValidator<Cardholder> validator, IMapper mapper) : ICardholderRepository
     {
-        private readonly CardholderDbContext _context;
-
-        public CardholderRepository(CardholderDbContext context)
+        public async Task<List<CardholderDTO>> GetAllAsync()
         {
-            _context = context;
+            var entities = await context.Cardholders.ToListAsync();
+            return mapper.Map<List<CardholderDTO>>(entities);
         }
 
-        public Task AddAsync(Cardholder cardholder)
+        public async Task<CardholderDTO?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await context.Cardholders.FirstOrDefaultAsync(c => c.Id == id);
+            return entity == null ? null : mapper.Map<CardholderDTO>(entity);
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task<CardholderDTO> AddAsync(CreateCardholderDTO dto)
         {
-            throw new NotImplementedException();
+            var entity = mapper.Map<Cardholder>(dto);
+
+            var validationResult = await validator.ValidateAsync(entity);
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.Errors);
+
+            await context.Cardholders.AddAsync(entity);
+            await context.SaveChangesAsync();
+
+            return mapper.Map<CardholderDTO>(entity);
         }
 
-        public async Task<List<Cardholder>> GetAllAsync()
+        public async Task UpdateAsync(Guid id, UpdateCardholderDTO dto)
         {
-            return await _context.Cardholders.ToListAsync();
+            var entity = await context.Cardholders.FirstOrDefaultAsync(c => c.Id == id) 
+                ?? throw new KeyNotFoundException($"Cardholder with id {id} not found.");
+            mapper.Map(dto, entity);
+
+            var validationResult = await validator.ValidateAsync(entity);
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.Errors);
+
+            await context.SaveChangesAsync();
         }
 
-        public Task<Cardholder?> GetByIdAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Cardholder cardholder)
-        {
-            throw new NotImplementedException();
+            var entity = await context.Cardholders.FindAsync(id) 
+                ?? throw new KeyNotFoundException($"Cardholder with id {id} not found.");
+            
+            context.Cardholders.Remove(entity);
+            await context.SaveChangesAsync();
         }
     }
 }

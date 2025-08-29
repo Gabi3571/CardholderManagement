@@ -1,0 +1,14 @@
+<!-- TO DO: Dodati prijevode -->
+<form [formGroup]="form">
+  <div *ngFor="let field of fields">
+    <mat-form-field appearance="fill" class="w-full mb-3">
+      <mat-label>{{ field.label }}</mat-label>
+      <input matInput [type]="field.type" [formControlName]="field.key">
+    </mat-form-field>
+  </div>
+
+  <div class="flex justify-end gap-2 mt-3">
+    <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-raised-button type="button" (click)="save()">Save</button>
+  </div>
+</form>
