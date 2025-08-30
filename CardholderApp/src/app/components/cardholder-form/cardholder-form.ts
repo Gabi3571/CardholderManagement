@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CardholderService } from '../../services/cardholder-service';
 import { Cardholder } from '../../models/cardholder';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -46,12 +46,20 @@ export class CardholderFormComponent implements OnChanges {
   private initForm() {
     const group: any = {};
     this.fields.forEach(f => {
-      group[f.key] = new FormControl(this.cardholder ? (this.cardholder as any)[f.key] : f.type === 'number' ? 0 : '');
+      group[f.key] = new FormControl(
+        (this.cardholder ? (this.cardholder as any)[f.key] : f.type === 'number' ? 0 : ''),
+        Validators.required
+      );
     });
     this.form = new FormGroup(group);
   }
 
   save() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     const data: Cardholder = { ...this.cardholder, ...this.form.value };
     const obs = this.cardholder?.id ? this.service.update(data) : this.service.create(data);
     obs.subscribe(() => this.dialogRef.close(true));

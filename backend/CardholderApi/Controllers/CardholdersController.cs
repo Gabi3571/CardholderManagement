@@ -1,10 +1,12 @@
 ﻿using CardholderApi.DTOs;
 using CardholderApi.Repositories.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CardholderApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CardholdersController(ICardholderRepository repository) : ControllerBase
