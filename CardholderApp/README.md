@@ -15,6 +15,7 @@ Make sure you have installed:
    ```bash
    dotnet restore
 3. Run the backend API:
+   ```bash
     dotnet run
 4. The API will start on the configured port (check launchSettings.json).
 Notes: The project uses SQLite, so no additional migrations or database setup are required; the database is included in the project.
@@ -24,14 +25,16 @@ Notes: The project uses SQLite, so no additional migrations or database setup ar
     2. Click Authorize in Swagger and paste the token (without Bearer prefix; Swagger will handle it).
     3. Access other endpoints, e.g., Cardholders.
 
---
+---
 
 ## 3. Frontend Setup (Angular)
 1. Navigate to the Angular frontend folder:
     cd CardholderApp
 2. Install dependencies:
+   ```bash
     npm install
 3. Start the frontend development server:
+   ```bash
     npm start
 4. Open your browser at http://localhost:4200 (default Angular port).
 
@@ -40,13 +43,26 @@ Notes:
     Angular version: 20.2.2
     Uses Angular Material.
 
---
+---
 
 ## 4. Running Tests
 1. Open the CardholderTests project (MSTest) in Visual Studio or run tests from the command line:
+   ```bash
     dotnet test
 2. All tests are located in the CardholderTests project.
 
+---
+
 ## 5. Swagger / API Testing
-- Swagger is available at https://localhost:<port>/swagger when the backend is running.
+- Swagger is available at https://localhost:7276/swagger when the backend is running.
 - Use the JWT token obtained from /auth for authenticated requests.
+
+---
+
+## 6.Screenshots
+
+Dashboard view:  
+![Dashboard](assets/images/cardholder-grid.png)
+
+Form example:  
+![Cardholder Form](assets/images/cardholder-form.png)
