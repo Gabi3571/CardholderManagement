@@ -9,7 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CardholderApi.Repositories
 {
-    public class CardholderRepository(CardholderDbContext context, IValidator<Cardholder> validator, IMapper mapper) : ICardholderRepository
+    public class CardholderRepository(
+        CardholderDbContext context, 
+        IValidator<Cardholder> validator, 
+        IMapper mapper
+    ) : ICardholderRepository
     {
         public async Task<PagedResult<CardholderDTO>> GetPagedAsync(int page, int pageSize, string sortOrder)
         {
