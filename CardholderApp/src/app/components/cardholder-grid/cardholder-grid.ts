@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { CARDHOLDER_FIELDS, FieldDefinition } from '../../models/cardholder-field-definition';
 
 @Component({
   selector: 'app-cardholders-grid',
@@ -29,6 +30,9 @@ export class CardholdersGridComponent implements OnInit {
   
   // TO DO: Zamijeniti konstantama
   columns = ['actions','firstName','lastName','address','phoneNumber','transactionCount'];
+
+  fields: FieldDefinition[] = CARDHOLDER_FIELDS;
+  displayedColumns: string[] = ['actions', ...CARDHOLDER_FIELDS.map(f => f.key)];
 
   constructor(private service: CardholderService, private dialog: MatDialog) {}
 

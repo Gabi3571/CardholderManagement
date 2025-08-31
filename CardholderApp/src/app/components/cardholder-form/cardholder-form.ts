@@ -7,6 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { CARDHOLDER_FIELDS } from '../../models/cardholder-field-definition';
 
 @Component({
   selector: 'app-cardholder-form',
@@ -18,14 +19,7 @@ export class CardholderFormComponent implements OnChanges {
   @Input() cardholder?: Cardholder;
   form!: FormGroup;
 
-  // TO DO: Kreirati drugi tip podataka i maknuti odavde
-  fields = [
-    { key: 'Firstname', label: 'First name', type: 'text' },
-    { key: 'lastName', label: 'Last name', type: 'text' },
-    { key: 'address', label: 'Address', type: 'text' },
-    { key: 'phoneNumber', label: 'Phone number', type: 'text' },
-    { key: 'transactionCount', label: 'Transaction Count', type: 'number' }
-  ];
+  fields = CARDHOLDER_FIELDS;
 
   constructor(
     private service: CardholderService,
@@ -46,11 +40,38 @@ export class CardholderFormComponent implements OnChanges {
   private initForm() {
     const group: any = {};
     this.fields.forEach(f => {
-      group[f.key] = new FormControl(
-        (this.cardholder ? (this.cardholder as any)[f.key] : f.type === 'number' ? 0 : ''),
-        Validators.required
-      );
+      let validators = [Validators.required];
+
+      switch (f.key) {
+        case 'Firstname':
+        case 'lastName':
+          validators.push(Validators.maxLength(50));
+          break;
+
+        case 'address':
+          validators.push(Validators.maxLength(200));
+          break;
+
+        case 'phoneNumber':
+          validators.push(Validators.maxLength(30));
+          validators.push(Validators.pattern(/^\+\d{1,15}$/));
+          break;
+
+        case 'transactionCount':
+          validators.push(Validators.min(0));
+          break;
+      }
+
+      const defaultValue =
+        this.cardholder
+          ? (this.cardholder as any)[f.key]
+          : f.type === 'number'
+          ? 0
+          : '';
+
+      group[f.key] = new FormControl(defaultValue, validators);
     });
+
     this.form = new FormGroup(group);
   }
 

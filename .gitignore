@@ -22,8 +22,8 @@ backend/CardholderApi/Migrations/*Snapshot.cs
 # REST
 *.http
 
-# App
-frontend/package-lock.json
+# Logs
+backend/CardholderApi/logs/
 
-# Node modules
-frontend/node_modules/
+# FE
+CardholderApp/package-lock.json

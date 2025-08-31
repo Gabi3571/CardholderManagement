@@ -1,59 +1,52 @@
-# CardholderApp
+# Setup Instructions
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
+## 1. Prerequisites
+Make sure you have installed:  
+- **Node.js** 20.x  
+- **npm** 10.x  
+- **.NET 8 SDK**  
+- **Visual Studio** (optional, for easier backend development)  
 
-## Development server
+---
 
-To start a local development server, run:
+## 2. Backend Setup (API)
+1. Open the solution in **Visual Studio** *or* navigate to the API folder in a terminal.  
+2. Restore NuGet packages:  
+   ```bash
+   dotnet restore
+3. Run the backend API:
+    dotnet run
+4. The API will start on the configured port (check launchSettings.json).
+Notes: The project uses SQLite, so no additional migrations or database setup are required; the database is included in the project.
 
-```bash
-ng serve
-```
+4. JWT-based authentication is implemented. To test endpoints in Swagger:
+    1. Send a POST /auth request to get the token.
+    2. Click Authorize in Swagger and paste the token (without Bearer prefix; Swagger will handle it).
+    3. Access other endpoints, e.g., Cardholders.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+--
 
-## Code scaffolding
+## 3. Frontend Setup (Angular)
+1. Navigate to the Angular frontend folder:
+    cd CardholderApp
+2. Install dependencies:
+    npm install
+3. Start the frontend development server:
+    npm start
+4. Open your browser at http://localhost:4200 (default Angular port).
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Notes:
+    Angular CLI version: 20.2.0
+    Angular version: 20.2.2
+    Uses Angular Material.
 
-```bash
-ng generate component component-name
-```
+--
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 4. Running Tests
+1. Open the CardholderTests project (MSTest) in Visual Studio or run tests from the command line:
+    dotnet test
+2. All tests are located in the CardholderTests project.
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 5. Swagger / API Testing
+- Swagger is available at https://localhost:<port>/swagger when the backend is running.
+- Use the JWT token obtained from /auth for authenticated requests.
