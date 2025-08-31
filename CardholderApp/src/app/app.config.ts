@@ -2,17 +2,20 @@ import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalE
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { AppConfig } from './config.model';
 import { firstValueFrom } from 'rxjs';
 import { APP_CONFIG } from './config.token';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withFetch()),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor])),
     provideAppInitializer(initConfig()),
     {
       provide: APP_CONFIG,

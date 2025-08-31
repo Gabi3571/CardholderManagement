@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CardholderApi.DTOs;
-using CardholderApi.DTOs;
 using CardholderApi.Entities;
+using CardholderApi.Models;
 using CardholderApi.Persistence;
 using CardholderApi.Repositories.Interfaces;
 using FluentValidation;
@@ -11,10 +11,26 @@ namespace CardholderApi.Repositories
 {
     public class CardholderRepository(CardholderDbContext context, IValidator<Cardholder> validator, IMapper mapper) : ICardholderRepository
     {
-        public async Task<List<CardholderDTO>> GetAllAsync()
+        public async Task<PagedResult<CardholderDTO>> GetPagedAsync(int page, int pageSize, string sortOrder)
         {
-            var entities = await context.Cardholders.ToListAsync();
-            return mapper.Map<List<CardholderDTO>>(entities);
+            var query = context.Cardholders.AsNoTracking();
+
+            query = sortOrder.ToLower() switch
+            {
+                "asc" => query.OrderBy(c => c.TransactionCount),
+                _ => query.OrderByDescending(c => c.TransactionCount)
+            };
+
+            var totalCount = await query.CountAsync();
+            var items = await query.Skip((page - 1) * pageSize)
+                                   .Take(pageSize)
+                                   .ToListAsync();
+
+            return new PagedResult<CardholderDTO>
+            {
+                Items = mapper.Map<List<CardholderDTO>>(items),
+                TotalCount = totalCount
+            };
         }
 
         public async Task<CardholderDTO?> GetByIdAsync(Guid id)

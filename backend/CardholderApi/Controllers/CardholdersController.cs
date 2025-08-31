@@ -1,4 +1,5 @@
 ﻿using CardholderApi.DTOs;
+using CardholderApi.Models;
 using CardholderApi.Repositories.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -12,9 +13,10 @@ namespace CardholderApi.Controllers
     public class CardholdersController(ICardholderRepository repository) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<CardholderDTO>>> GetAll()
+        public async Task<ActionResult<PagedResult<CardholderDTO>>> GetAll(int page = 1, int pageSize = 10, string sortOrder = "desc")
         {
-            return Ok(await repository.GetAllAsync());
+            var result = await repository.GetPagedAsync(page, pageSize, sortOrder);
+            return Ok(result);
         }
 
         [HttpGet("{id:guid}")]

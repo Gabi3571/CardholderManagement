@@ -20,7 +20,7 @@ export class CardholderFormComponent implements OnChanges {
 
   // TO DO: Kreirati drugi tip podataka i maknuti odavde
   fields = [
-    { key: 'firstName', label: 'First name', type: 'text' },
+    { key: 'Firstname', label: 'First name', type: 'text' },
     { key: 'lastName', label: 'Last name', type: 'text' },
     { key: 'address', label: 'Address', type: 'text' },
     { key: 'phoneNumber', label: 'Phone number', type: 'text' },
