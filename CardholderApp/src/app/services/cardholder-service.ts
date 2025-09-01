@@ -4,6 +4,7 @@ import { APP_CONFIG } from '../config.token';
 import { Observable } from 'rxjs';
 import { Cardholder } from '../models/cardholder';
 import { PagedResult } from '../models/pagedresult';
+import { API_BASE_URL } from '../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,10 @@ export class CardholderService {
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
-  //private apiUrl = `${this.config.apiUrl}/cardholders`;
-  private apiUrl = 'https://localhost:7276/api/cardholders'; // TO DO: Ispraviti nemogućnost inject-anja config tokena
+    private get apiUrl(): string {
+      return `${API_BASE_URL}/cardholders`; // Workaround
+      //return `${this.config.apiUrl}/cardholders`; 
+    }
 
   getAll(): Observable<Cardholder[]> {
     return this.http.get<Cardholder[]>(this.apiUrl);

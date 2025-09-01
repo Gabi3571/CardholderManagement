@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable, of, tap } from "rxjs";
 import { APP_CONFIG } from "../config.token";
+import { API_BASE_URL, SECRET_KEY } from "../constants";
 
 @Injectable({ providedIn: 'root' })
 
@@ -10,11 +11,10 @@ export class AuthService {
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
-  private secretKey = 'a97cc3e0ef9c047d57c9348fdd8c78fef2a7aace505521caee700601b6633a84b491e08';
-
+  // TO DO: Ispraviti nemogućnost inject-anja config tokena - komentirati ovo
   private get apiUrl(): string {
-    return `https://localhost:7276/api/auth`;
-    //return `${this.config.apiUrl}/auth`; // TO DO: Ispraviti nemogućnost inject-anja config tokena
+    return `${API_BASE_URL}/auth`; // workaround
+    //return `${this.config.apiUrl}/auth`; 
   }
 
   getToken(): Observable<string> {
@@ -22,7 +22,7 @@ export class AuthService {
 
     return this.http.post<{ token: string }>(
       `${this.apiUrl}`,
-      { secretKey: this.secretKey }
+      { secretKey: SECRET_KEY } // workaround
     ).pipe(
       tap(res => this.token = res.token),
       map(res => res.token)

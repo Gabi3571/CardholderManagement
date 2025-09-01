@@ -28,9 +28,6 @@ export class CardholdersGridComponent implements OnInit {
 
   formDialogRef?: MatDialogRef<CardholderFormComponent>;
   
-  // TO DO: Zamijeniti konstantama
-  columns = ['actions','firstName','lastName','address','phoneNumber','transactionCount'];
-
   fields: FieldDefinition[] = CARDHOLDER_FIELDS;
   displayedColumns: string[] = ['actions', ...CARDHOLDER_FIELDS.map(f => f.key)];
 
@@ -57,7 +54,6 @@ export class CardholdersGridComponent implements OnInit {
   }
 
   deleteCardholder(id: number) {
-    // TO DO: Dodati prijevode
     if (confirm('Are you sure you want to delete this cardholder?')) {
       this.service.delete(id).subscribe(() => this.loadCardholders());
     }
@@ -81,7 +77,6 @@ export class CardholdersGridComponent implements OnInit {
   }
 
   onSortTransactionCount() {
-    console.log("klik doše u funkciju")
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.pageIndex = 0;
     this.loadCardholders();
